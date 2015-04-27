@@ -4,7 +4,7 @@ RAW_LOGS = LOAD 'data/access.log' USING TextLoader as (line:chararray);
 
 LOGS_BASE = FOREACH RAW_LOGS GENERATE
     FLATTEN(
-      REGEX_EXTRACT_ALL(line, '(\\S+) - - \\[([^\\[]+)\\]\\s+"([^"]+)"\\s+(\\d+)\\s+(\\d+)\\s+"([^"]+)"\\s+"([^"]+)"\\s+"([^"]+)"\\s+(\\S+)')
+      REGEX_EXTRACT_ALL(line, '(\\S+) - - \\[([^\\[]+)\\]\\s+"([^"]+)"\\s+(\\d+)\\s+(\\d+)\\s+"([^"]+)"\\s+"([^"]+)"\\s+-')
     )
     AS (
         ip: chararray,
@@ -13,12 +13,10 @@ LOGS_BASE = FOREACH RAW_LOGS GENERATE
         status: chararray,
         bytes: chararray,
         referrer: chararray,
-        useragent: chararray,
-        xfwd: chararray,
-        reqtime: chararray
+        useragent: chararray
     );
 
-A = FOREACH LOGS_BASE GENERATE timestamp;
+A = FOREACH LOGS_BASE GENERATE ip,timestamp,url,status,bytes,referrer,useragent;
 --B = GROUP A BY (timestamp);
 --C = FOREACH B GENERATE FLATTEN(group) as (timestamp), COUNT(A) as count;
 --D = ORDER C BY timestamp,count desc;
