@@ -1,3 +1,4 @@
 .idea
-access.log
 *.pyc
+data/access.log
+*.log
