@@ -21,5 +21,4 @@ A = FOREACH LOGS_BASE GENERATE ip,timestamp,url,status,bytes,referrer,useragent;
 --B = GROUP A BY (timestamp);
 --C = FOREACH B GENERATE FLATTEN(group) as (timestamp), COUNT(A) as count;
 --D = ORDER C BY timestamp,count desc;
-STORE A into 'analytics.log';
 STORE A INTO 'nginx/log' USING org.elasticsearch.hadoop.pig.EsStorage();
