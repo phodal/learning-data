@@ -1,4 +1,5 @@
 register file:/usr/local/Cellar/pig/0.14.0/libexec/lib/piggybank.jar;
+register file:/usr/local/Cellar/pig/0.14.0/libexec/lib/elasticsearch-hadoop-pig-2.1.0.Beta3.jar;
 
 RAW_LOGS = LOAD 'data/access.log' USING TextLoader as (line:chararray);
 
@@ -21,3 +22,4 @@ A = FOREACH LOGS_BASE GENERATE ip,timestamp,url,status,bytes,referrer,useragent;
 --C = FOREACH B GENERATE FLATTEN(group) as (timestamp), COUNT(A) as count;
 --D = ORDER C BY timestamp,count desc;
 STORE A into 'analytics.log';
+STORE A INTO 'nginx/log' USING org.elasticsearch.hadoop.pig.EsStorage();
