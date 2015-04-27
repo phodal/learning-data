@@ -17,10 +17,8 @@ LOGS_BASE = FOREACH RAW_LOGS GENERATE
         useragent: chararray
     );
 
-A = FOREACH LOGS_BASE GENERATE ip,timestamp,url,status,bytes,referrer,useragent;
-B = FOREACH A GENERATE ToDate(timestamp, 'dd/MMM/yyyy:HH:mm:ss Z') as date, ip, url,(int)status,(int)bytes,referrer,useragent;
-
+A = FOREACH LOGS_BASE GENERATE ToDate(timestamp, 'dd/MMM/yyyy:HH:mm:ss Z') as date, ip, url,(int)status,(int)bytes,referrer,useragent;
 --B = GROUP A BY (timestamp);
 --C = FOREACH B GENERATE FLATTEN(group) as (timestamp), COUNT(A) as count;
 --D = ORDER C BY timestamp,count desc;
-STORE B INTO 'nginx/log' USING org.elasticsearch.hadoop.pig.EsStorage();
+STORE A INTO 'nginx/log' USING org.elasticsearch.hadoop.pig.EsStorage();
