@@ -5,3 +5,5 @@ analytics.log
 *.log
 data
 log
+node_modules
+
