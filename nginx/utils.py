@@ -12,12 +12,21 @@ def query(url):
     except:
         pass
 
-@outputSchema('location:chararray')
-def location(ip):
+@outputSchema('city:chararray')
+def get_city(ip):
     try:
         gi = pygeoip.GeoIP("data/GeoLiteCity.dat")
-        location = gi.region_by_addr(ip)
-        print location
-        return ip
+        city = gi.record_by_name(ip)["city"]
+        return city
+    except:
+        pass
+
+
+@outputSchema('geo:chararray')
+def get_geo(ip):
+    try:
+        gi = pygeoip.GeoIP("data/GeoLiteCity.dat")
+        lntlong = [gi.record_by_name(ip)["latitude"], gi.record_by_name(ip)["longitude"]]
+        return str(lntlong)
     except:
         pass
