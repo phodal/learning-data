@@ -74,7 +74,7 @@ client.search(query).then(function(results){
 
 		var iconFeature = new ol.Feature({
 			geometry: new ol.geom.Point(pos),
-			name: result.city
+			city: result.city
 		});
 		vectorSource.addFeature(iconFeature);
 	});
@@ -94,4 +94,34 @@ client.search(query).then(function(results){
 		style: iconStyle
 	});
 	map.addLayer(vectorLayer);
+
+	var element = document.getElementById('popup');
+
+	var popup = new ol.Overlay({
+		element: element,
+		positioning: 'bottom-center',
+		stopEvent: false
+	});
+	map.addOverlay(popup);
+
+	map.on('click', function(evt) {
+		var feature = map.forEachFeatureAtPixel(evt.pixel,
+			function(feature, layer) {
+				return feature;
+			});
+
+		if (feature) {
+			var geometry = feature.getGeometry();
+			var coord = geometry.getCoordinates();
+			popup.setPosition(coord);
+			$(element).popover({
+				'placement': 'top',
+				'html': true,
+				'content': "<h4>" + feature.get('city') + "</h4>"
+			});
+			$(element).popover('show');
+		} else {
+			$(element).popover('destroy');
+		}
+	});
 });
