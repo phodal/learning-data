@@ -3,3 +3,5 @@
 data/access.log
 analytics.log
 *.log
+data
+log
