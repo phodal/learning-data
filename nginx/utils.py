@@ -4,7 +4,6 @@ import sys
 sys.path.append('/Users/fdhuang/py27/lib/python2.7/site-packages/')
 import pygeoip
 
-
 @outputSchema('everything:chararray')
 def query(url):
     try:
@@ -22,11 +21,11 @@ def get_city(ip):
         pass
 
 
-@outputSchema('geo:chararray')
+@outputSchema('location:chararray')
 def get_geo(ip):
     try:
         gi = pygeoip.GeoIP("data/GeoLiteCity.dat")
-        lntlong = [gi.record_by_name(ip)["latitude"], gi.record_by_name(ip)["longitude"]]
-        return str(lntlong)
+        geo = str(gi.record_by_name(ip)["longitude"]) + "," + str(gi.record_by_name(ip)["latitude"])
+        return geo
     except:
         pass
