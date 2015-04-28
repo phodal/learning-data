@@ -40,3 +40,58 @@ var map = new ol.Map({
 	target: 'map',
 	view: view
 });
+
+var client = new $.es.Client({
+	hosts: 'localhost:9200'
+});
+
+var query = {
+	"index": 'nginx',
+	"query": {
+		"query_string": {
+			"query": "*"
+		}
+	},
+	"aggs": {
+		"2": {
+			"terms": {
+				"field": "location",
+				"size": 100,
+				"order": {
+					"_count": "desc"
+				}
+			}
+		}
+	}
+};
+
+client.search(query).then(function(results){
+	var vectorSource = new ol.source.Vector({ });
+	$.each(results.hits.hits, function(index, result){
+		result = result._source;
+		var position = result.location.split(",");
+		var pos = ol.proj.transform([parseFloat(position[0]), parseFloat(position[1])], 'EPSG:4326', 'EPSG:3857');
+
+		var iconFeature = new ol.Feature({
+			geometry: new ol.geom.Point(pos),
+			name: result.city
+		});
+		vectorSource.addFeature(iconFeature);
+	});
+
+	var iconStyle = new ol.style.Style({
+		image: new ol.style.Icon(({
+			anchor: [0.5, 46],
+			anchorXUnits: 'fraction',
+			anchorYUnits: 'pixels',
+			opacity: 0.75,
+			src: 'img/icon.png'
+		}))
+	});
+
+	var vectorLayer = new ol.layer.Vector({
+		source: vectorSource,
+		style: iconStyle
+	});
+	map.addLayer(vectorLayer);
+});
