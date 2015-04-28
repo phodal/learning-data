@@ -6,4 +6,5 @@ analytics.log
 data
 log
 node_modules
-
+*/test/
+*/data/
