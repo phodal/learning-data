@@ -48,6 +48,7 @@ var client = new $.es.Client({
 var query = {
 	index: 'nginx',
 	type: 'log',
+	size: 200,
 	body: {
 		query: {
 			query_string: {
@@ -57,7 +58,7 @@ var query = {
 		aggs: {
 			2: {
 				terms: {
-					field: "location",
+					field: "city",
 					size: 100,
 					order: {
 						_count: "desc"
@@ -72,6 +73,9 @@ client.search(query).then(function(results){
 	var vectorSource = new ol.source.Vector({ });
 	$.each(results.hits.hits, function(index, result){
 		result = result._source;
+		if(result.location === null) {
+			return;
+		}
 		var position = result.location.split(",");
 		var pos = ol.proj.transform([parseFloat(position[0]), parseFloat(position[1])], 'EPSG:4326', 'EPSG:3857');
 
