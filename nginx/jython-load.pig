@@ -18,7 +18,8 @@ LOGS_BASE = FOREACH RAW_LOGS GENERATE
         useragent: chararray
     );
 
-A = FOREACH LOGS_BASE GENERATE ToDate(timestamp, 'dd/MMM/yyyy:HH:mm:ss Z') as date, utils.get_city(ip) as city,
-    utils.get_geo(ip) as location,ip, utils.query(url) as url,(int)status,(int)bytes,referrer,useragent;
+A = FOREACH LOGS_BASE GENERATE ToDate(timestamp, 'dd/MMM/yyyy:HH:mm:ss Z') as date, utils.get_country(ip) as country,
+    utils.get_city(ip) as city, utils.get_geo(ip) as location,ip,
+    utils.query(url) as url,(int)status,(int)bytes,referrer,useragent;
 
 STORE A INTO 'log';
