@@ -46,19 +46,22 @@ var client = new $.es.Client({
 });
 
 var query = {
-	"index": 'nginx',
-	"query": {
-		"query_string": {
-			"query": "*"
-		}
-	},
-	"aggs": {
-		"2": {
-			"terms": {
-				"field": "location",
-				"size": 100,
-				"order": {
-					"_count": "desc"
+	index: 'nginx',
+	type: 'log',
+	body: {
+		query: {
+			query_string: {
+				query: "*"
+			}
+		},
+		aggs: {
+			2: {
+				terms: {
+					field: "location",
+					size: 100,
+					order: {
+						_count: "desc"
+					}
 				}
 			}
 		}
