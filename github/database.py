@@ -4,19 +4,14 @@
 from __future__ import (division, print_function, absolute_import,
                         unicode_literals)
 
-__all__ = ["get_connection", "get_pipeline", "format_key"]
+__all__ = ["get_pipeline", "format_key"]
 
 import redis
-redis_pool = None
-
-
-def get_connection():
-    redis_pool = redis.ConnectionPool(port=6379)
-    return redis.Redis(connection_pool=redis_pool)
 
 
 def get_pipeline():
-    r = get_connection()
+    pool = redis.ConnectionPool(host='localhost', port=6379, db=5)
+    r = redis.Redis(connection_pool=pool)
     return r.pipeline()
 
 
