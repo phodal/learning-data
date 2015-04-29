@@ -60,7 +60,6 @@ var generate_info = function(data){
 };
 
 var create_map = function(mapData){
-	console.log(mapData)
 	var map;
 	var minBulletSize = 3;
 	var maxBulletSize = 70;
@@ -80,7 +79,7 @@ var create_map = function(mapData){
 	}
 
 	map = new AmCharts.AmMap();
-	map.pathToImages = "ammap/images/";
+	map.pathToImages = "bower_components/ammap/dist/ammap/images/";
 
 	map.addTitle("Website traffic Map", 14);
 	map.addTitle("source: nginx access log", 11);
