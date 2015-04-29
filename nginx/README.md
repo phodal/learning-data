@@ -21,5 +21,6 @@
 1. get jar from [https://github.com/elastic/elasticsearch-hadoop](https://github.com/elastic/elasticsearch-hadoop)
 2. cp elasticsearch-hadoop-pig. for example to `` /usr/local/Cellar/pig/0.14.0/libexec/lib/``      
 
+![Nginx Map with Ammap](screenshot.jpg)
 ![Nginx Map with ES Hadoop](screenshot_nginx_map.jpg)
 
