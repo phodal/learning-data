@@ -1858,10 +1858,10 @@ for (var i = 0; i < mapData.length; i++) {
 // build map
 AmCharts.ready(function() {
 	map = new AmCharts.AmMap();
-	map.pathToImages = "../ammap/images/";
+	map.pathToImages = "ammap/images/";
 
-	map.addTitle("Population of the World in 2011", 14);
-	map.addTitle("source: Gapminder", 11);
+	map.addTitle("Website traffic Map", 14);
+	map.addTitle("source: nginx access log", 11);
 	map.areasSettings = {
 		unlistedAreasColor: "#FFFFFF",
 		unlistedAreasAlpha: 0.1
@@ -1869,20 +1869,16 @@ AmCharts.ready(function() {
 	map.imagesSettings = {
 		balloonText: "<span style='font-size:14px;'><b>[[title]]</b>: [[value]]</span>",
 		alpha: 0.6
-	}
+	};
 
 	var dataProvider = {
 		mapVar: AmCharts.maps.worldLow,
 		images: []
-	}
+	};
 
-	// create circle for each country
-
-	// it's better to use circle square to show difference between values, not a radius
 	var maxSquare = maxBulletSize * maxBulletSize * 2 * Math.PI;
 	var minSquare = minBulletSize * minBulletSize * 2 * Math.PI;
 
-	// create circle for each country
 	for (var i = 0; i < mapData.length; i++) {
 		var dataItem = mapData[i];
 		var value = dataItem.value;
@@ -1905,34 +1901,6 @@ AmCharts.ready(function() {
 			value: value
 		});
 	}
-
-
-
-	// the following code uses circle radius to show the difference
-	/*
-	 for (var i = 0; i < mapData.length; i++) {
-	 var dataItem = mapData[i];
-	 var value = dataItem.value;
-	 // calculate size of a bubble
-	 var size = (value - min) / (max - min) * (maxBulletSize - minBulletSize) + minBulletSize;
-	 if (size < minBulletSize) {
-	 size = minBulletSize;
-	 }
-	 var id = dataItem.code;
-
-	 dataProvider.images.push({
-	 type: "circle",
-	 width: size,
-	 height: size,
-	 color: dataItem.color,
-	 longitude: latlong[id].longitude,
-	 latitude: latlong[id].latitude,
-	 title: dataItem.name,
-	 value: value
-	 });
-	 }*/
-
-
 
 	map.dataProvider = dataProvider;
 
