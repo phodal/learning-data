@@ -4,6 +4,7 @@
   "dependencies": {
     "bootstrap": "~3.2.0",
     "elasticsearch": "~4.0.2",
-    "d3": "~3.5.5"
+    "d3": "~3.5.5",
+    "papaparse": "~4.1.1"
   }
 }

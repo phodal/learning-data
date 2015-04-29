@@ -1,31 +1,3 @@
-var client = new $.es.Client({
-	hosts: 'localhost:9200'
-});
-
-var query = {
-	index: 'nginx',
-	type: 'log',
-	size: 200,
-	body: {
-		query: {
-			query_string: {
-				query: "*"
-			}
-		},
-		aggs: {
-			2: {
-				terms: {
-					field: "city",
-					size: 10,
-					order: {
-						_count: "desc"
-					}
-				}
-			}
-		}
-	}
-};
-
 var latlong = {};
 latlong["AD"] = {
 	"latitude": 42.5,
@@ -1856,7 +1828,7 @@ for (var i = 0; i < mapData.length; i++) {
 }
 
 // build map
-AmCharts.ready(function() {
+AmCharts.ready(function () {
 	map = new AmCharts.AmMap();
 	map.pathToImages = "ammap/images/";
 
@@ -1907,46 +1879,63 @@ AmCharts.ready(function() {
 	map.write("mapdiv");
 });
 
-client.search(query).then(function(results){
-	var width = 300,
-		height = 300,
-		radius = Math.min(width, height) / 2;
+var client = new $.es.Client({
+	hosts: 'localhost:9200'
+});
 
-	var color = d3.scale.ordinal()
-		.range(["#1abc9c", "#16a085", "#2ecc71", "#27ae60", "#4caf50", "#8bc34a", "#cddc39", "#3498db", "#2980b9", "#34495e", "#2c3e50", "#2196f3", "#03a9f4", "#00bcd4", "#009688", "#e74c3c", "#c0392b", "#f44336", "#e67e22", "#d35400", "#f39c12", "#ff9800", "#ff5722", "#ffc107", "#f1c40f", "#ffeb3b", "#9b59b6", "#8e44ad", "#9c27b0", "#673ab7", "#e91e63", "#3f51b5", "#795548", "#9e9e9e", "#607d8b", "#7f8c8d", "#95a5a6", "#bdc3c7", "#ecf0f1", "#efefef"]);
+var query = {
+	index: 'nginx',
+	type: 'log',
+	size: 200,
+	body: {
+		query: {
+			query_string: {
+				query: "*"
+			}
+		},
+		aggs: {
+			2: {
+				terms: {
+					field: "country",
+					size: 30,
+					order: {
+						_count: "desc"
+					}
+				}
+			}
+		}
+	}
+};
 
-	var arc = d3.svg.arc()
-		.outerRadius(radius - 10)
-		.innerRadius(0);
+var papa_config = {
+	delimiter: "",	// auto-detect
+	newline: "",	// auto-detect
+	header: false,
+	dynamicTyping: false,
+	preview: 0,
+	encoding: "",
+	worker: false,
+	comments: false,
+	step: undefined,
+	complete: undefined,
+	error: undefined,
+	download: false,
+	skipEmptyLines: false,
+	chunk: undefined,
+	fastMode: undefined,
+	beforeFirstChunk: undefined
+};
 
-	var pie = d3.layout.pie()
-		.sort(null)
-		.value(function(d) { return d.doc_count; });
-
-	var svg = d3.select("body").append("svg")
-		.attr("width", width)
-		.attr("height", height)
-		.append("g")
-		.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-	var citys = results.aggregations[2].buckets;
-	citys.forEach(function(city) {
-		city.doc_count = +city.doc_count;
+client.search(query).then(function (results) {
+	$(document).ready(function () {
+		$.ajax({
+			type: "GET",
+			url: "country-codes.csv",
+			dataType: "text",
+			success: function (data) {
+				console.log(Papa.parse(data, papa_config))
+			}
+		});
 	});
-
-	var g = svg.selectAll(".arc")
-		.data(pie(citys))
-		.enter().append("g")
-		.attr("class", "arc");
-
-	g.append("path")
-		.attr("d", arc)
-		.style("fill", function(city) { return color(city.data.key); });
-
-	g.append("text")
-		.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-		.attr("dy", ".35em")
-		.style("text-anchor", "middle")
-		.text(function(d) { return d.data.key; });
 
 });
