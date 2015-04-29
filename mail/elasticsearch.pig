@@ -1,16 +1,14 @@
-/* Set Home Directory - where we install software */
-
-/* Avro uses json-simple, and is in piggybank until Pig 0.12, where AvroStorage and TrevniStorage are builtins */
 register file:/usr/local/Cellar/pig/0.14.0/libexec/lib/piggybank.jar;
 register file:/usr/local/Cellar/pig/0.14.0/libexec/lib/avro-1.7.5.jar;
 register file:/usr/local/Cellar/pig/0.14.0/libexec/lib/json-simple-1.1.jar;
 register file:/usr/local/Cellar/elasticsearch/1.4.4/libexec/*.jar;
+register utils.py using jython as utils;
 
 messages = load 'data/part-1.avro' using AvroStorage();
 
-messages = FILTER messages BY (from IS NOT NULL) AND (tos IS NOT NULL);
+messages = FILTER messages BY (from IS NOT NULL) AND (tos IS NOT NULL) AND (subject IS NOT NULL);
 
-info = FOREACH messages GENERATE from.address AS from, FLATTEN(tos.(address)) AS to, subject, date;
+info = FOREACH messages GENERATE from.address AS from, FLATTEN(tos.(address)) AS to, utils.encode_subject(subject) as subject, date;
 
 STORE info INTO 'test';
 
