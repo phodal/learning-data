@@ -8,8 +8,6 @@ messages = load 'data/part-1.avro' using AvroStorage();
 
 messages = FILTER messages BY (from IS NOT NULL) AND (tos IS NOT NULL) AND (subject IS NOT NULL);
 
-info = FOREACH messages GENERATE from.address AS from, FLATTEN(tos.(address)) AS to, utils.encode_subject(subject) as subject, date;
+info = FOREACH messages GENERATE from.address AS from, FLATTEN(tos.(address)) AS to, subject, date;
 
-STORE info INTO 'test';
-
---STORE sent_count_json INTO 'inbox/sendcounts' USING org.elasticsearch.hadoop.pig.EsStorage();
+STORE info INTO 'inbox/sendcounts' USING org.elasticsearch.hadoop.pig.EsStorage();
