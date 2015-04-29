@@ -6,7 +6,6 @@ from __future__ import (division, print_function, absolute_import,
 
 __all__ = ["get_connection", "get_pipeline", "format_key"]
 
-import flask
 import redis
 redis_pool = None
 
