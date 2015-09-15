@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import sys
-sys.path.append('/Users/fdhuang/py27/lib/python2.7/site-packages/')
+sys.path.append('/Users/fdhuang/test/lib/python2.7/site-packages/')
 import pygeoip
 gi = pygeoip.GeoIP("data/GeoLiteCity.dat")
 
