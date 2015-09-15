@@ -81,8 +81,8 @@ var create_map = function(mapData){
 	map = new AmCharts.AmMap();
 	map.pathToImages = "bower_components/ammap/dist/ammap/images/";
 
-	map.addTitle("Website traffic Map", 14);
-	map.addTitle("source: nginx access log", 11);
+	//map.addTitle("Website traffic Map", 14);
+	//map.addTitle("source: nginx access log", 11);
 	map.areasSettings = {
 		unlistedAreasColor: "#FFFFFF",
 		unlistedAreasAlpha: 0.1
