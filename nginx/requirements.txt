@@ -1,5 +1,4 @@
 pyelasticsearch
-jython
 GeoIP
 python-geoip
 python-geoip-geolite2
