@@ -1,2 +1,2 @@
 #!/bin/sh
-pig -x local test.pig
+pig -x local load.pig
